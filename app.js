@@ -6,6 +6,21 @@ function setup() {
   background(0);
 }
 
+function logWeightedRandom() {
+  let sum = 0;
+  for (let i = 1; i <= 99; i++) {
+    sum += Math.log10(100/i);
+  }
+  let rand = Math.random() * sum;
+  let acc = 0;
+  for (let i = 1; i <= 99; i++) {
+    acc += Math.log10(100/i);
+    if (rand < acc) {
+      return i;
+    }
+  }
+}
+
 function draw() {
   background(0);
 
@@ -21,7 +36,7 @@ function draw() {
 
   if (mouseIsPressed) {
     let color = randomPastelColor();
-    let width = random(2, 50);
+    let width = logWeightedRandom();
     let laser = new Laser(mouseX, mouseY, color, width);
     lasers.push(laser);
   }
