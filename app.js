@@ -9,12 +9,12 @@ function setup() {
 function logWeightedRandom() {
   let sum = 0;
   for (let i = 1; i <= 99; i++) {
-    sum += Math.log10(100/i);
+    sum += Math.log10(100 / i);
   }
-  let rand = Math.random() * sum;
+  const rand = Math.random() * sum;
   let acc = 0;
   for (let i = 1; i <= 99; i++) {
-    acc += Math.log10(100/i);
+    acc += Math.log10(100 / i);
     if (rand < acc) {
       return i;
     }
@@ -24,29 +24,26 @@ function logWeightedRandom() {
 function draw() {
   background(0);
 
-  for (let i = lasers.length - 1; i >= 0; i--) {
-    let l = lasers[i];
-    l.show();
-    l.update();
+  lasers = lasers.filter((l) => !l.isOffscreen()); // remove offscreen lasers
 
-    if (l.isOffscreen()) {
-      lasers.splice(i, 1);
-    }
-  }
+  lasers.forEach((laser) => {
+    laser.show();
+    laser.update();
+  });
 
   if (mouseIsPressed) {
-    let color = randomPastelColor();
-    let width = logWeightedRandom();
-    let laser = new Laser(mouseX, mouseY, color, width);
+    const color = randomPastelColor();
+    const width = logWeightedRandom();
+    const laser = new Laser(mouseX, mouseY, color, width);
     lasers.push(laser);
   }
 }
 
 function randomPastelColor() {
-  let r = Math.floor(Math.random() * 128 + 128);
-  let g = Math.floor(Math.random() * 128 + 128);
-  let b = Math.floor(Math.random() * 128 + 128);
-  return "#" + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+  const r = Math.floor(Math.random() * 128 + 128);
+  const g = Math.floor(Math.random() * 128 + 128);
+  const b = Math.floor(Math.random() * 128 + 128);
+  return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
 }
 
 class Laser {
@@ -59,6 +56,7 @@ class Laser {
 
   update() {
     this.pos.add(this.vel);
+    this.vel.mult(0.99);
 
     if (this.pos.x < 0 || this.pos.x > width) {
       this.vel.x *= -1;
@@ -66,8 +64,6 @@ class Laser {
     if (this.pos.y < 0 || this.pos.y > height) {
       this.vel.y *= -1;
     }
-
-    this.vel.mult(0.99);
   }
 
   show() {
@@ -79,3 +75,4 @@ class Laser {
     return (this.pos.x < 0 || this.pos.x > width || this.pos.y < 0 || this.pos.y > height);
   }
 }
+
