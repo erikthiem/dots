@@ -20,20 +20,18 @@ function draw() {
   }
 
   if (mouseIsPressed) {
-    let color = getRandomColor();
+    let color = randomPastelColor();
     let width = random(2, 50);
     let laser = new Laser(mouseX, mouseY, color, width);
     lasers.push(laser);
   }
 }
 
-function getRandomColor() {
-  let letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
+function randomPastelColor() {
+  let r = Math.floor(Math.random() * 128 + 128);
+  let g = Math.floor(Math.random() * 128 + 128);
+  let b = Math.floor(Math.random() * 128 + 128);
+  return "#" + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
 }
 
 class Laser {
